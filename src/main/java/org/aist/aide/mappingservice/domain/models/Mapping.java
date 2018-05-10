@@ -1,12 +1,12 @@
 package org.aist.aide.mappingservice.domain.models;
 
+import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "mapping",
-       uniqueConstraints = {@UniqueConstraint(columnNames={"label", "type"})})
+       uniqueConstraints = {@UniqueConstraint(columnNames = {"label", "type"})})
 public class Mapping implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,6 +19,9 @@ public class Mapping implements Serializable {
     private String type;
 
     private String abstraction;
+
+    public Mapping() {
+    }
 
     public Mapping(@NotBlank String label, @NotBlank String type, String abstraction) {
         this.label = label;

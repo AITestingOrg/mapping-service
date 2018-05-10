@@ -14,6 +14,8 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: "jacoco"
+apply plugin: 'checkstyle'
 
 group = 'org.aist.aide'
 version = '0.0.1'
@@ -32,7 +34,7 @@ ext {
 dependencies {
 	compile 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 	compile "org.springframework.boot:spring-boot-starter-jdbc:${springBootVersion}"
-    //compile "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
+    compile "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
     compile 'org.springframework:spring-orm'
     compile 'org.hibernate:hibernate-entitymanager'
     compile "org.springframework.boot:spring-boot-starter-data-rest:${springBootVersion}"
@@ -52,3 +54,42 @@ dependencyManagement {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
 	}
 }
+
+checkstyle {
+	toolVersion = "8.7"
+	configFile = new File(rootDir, "checkstyle.xml")
+	maxWarnings = 0
+	maxErrors = 0
+}
+
+checkstyleMain {
+	source = fileTree('src/main') {
+		excludes = ['*.yml']
+	}
+}
+checkstyleTest {
+	source = fileTree('src/test') {
+		excludes = ['*.yml']
+	}
+}
+
+jacoco {
+	toolVersion = "0.8.1"
+}
+
+jacocoTestReport {
+	reports {
+		html.destination file("${buildDir}/jacocoHtml")
+	}
+}
+
+jacocoTestCoverageVerification {
+	violationRules {
+		rule {
+			limit {
+				minimum = 0.85
+			}
+		}
+	}
+}
+test.finalizedBy(jacocoTestCoverageVerification)

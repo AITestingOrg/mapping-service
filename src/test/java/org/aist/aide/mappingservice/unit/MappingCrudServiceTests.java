@@ -31,12 +31,12 @@ public class MappingCrudServiceTests {
     private MappingCrudService patternCrudService;
 
 
-    private final String LABEL = "LABEL";
-    private final String TYPE = "type";
-    private final String ABSTRACTION = "ABSTRACTION";
+    private final String label = "label";
+    private final String type = "type";
+    private final String abstraction = "abstraction";
 
     @Before
-    public void initMocks(){
+    public void initMocks() {
         MockitoAnnotations.initMocks(this);
     }
 
@@ -45,7 +45,7 @@ public class MappingCrudServiceTests {
         // arrange
 
         // act
-        patternCrudService.getMapping(LABEL, TYPE);
+        patternCrudService.getMapping(label, type);
 
         // assert
     }
@@ -53,11 +53,11 @@ public class MappingCrudServiceTests {
     @Test
     public void givenAMappingExists_WhenFindCalled_TheMappingIsReturned() throws NotFoundException {
         // arrange
-        var mapping = new Mapping(LABEL, TYPE, ABSTRACTION);
-        when(patternRepository.findByLabelAndType(LABEL, TYPE)).thenReturn(Optional.of(mapping));
+        var mapping = new Mapping(label, type, abstraction);
+        when(patternRepository.findByLabelAndType(label, type)).thenReturn(Optional.of(mapping));
 
         // act
-        var mappingFound = patternCrudService.getMapping(LABEL, TYPE);
+        var mappingFound = patternCrudService.getMapping(label, type);
 
         // assert
         Assert.assertEquals(mapping, mappingFound);
@@ -76,7 +76,7 @@ public class MappingCrudServiceTests {
     @Test
     public void givenAMappingExists_WhenDeleteCalled_NoExceptionIsThrownAndDeleteIsCalled() throws NotFoundException {
         // arrange
-        var mapping = new Mapping(LABEL, TYPE, ABSTRACTION);
+        var mapping = new Mapping(label, type, abstraction);
         when(patternRepository.findById((long) 1)).thenReturn(Optional.of(mapping));
 
         // act
@@ -89,8 +89,8 @@ public class MappingCrudServiceTests {
     @Test(expected = ValidationFailureException.class)
     public void givenAMappingExists_WhenCreateCalled_ExceptionIsThrown() throws ValidationFailureException {
         // arrange
-        var mapping = new Mapping(LABEL, TYPE, ABSTRACTION);
-        when(patternRepository.findByLabelAndType(LABEL, TYPE)).thenReturn(Optional.of(mapping));
+        var mapping = new Mapping(label, type, abstraction);
+        when(patternRepository.findByLabelAndType(label, type)).thenReturn(Optional.of(mapping));
 
         // act
         patternCrudService.createMapping(mapping);
@@ -101,7 +101,7 @@ public class MappingCrudServiceTests {
     @Test
     public void givenNoMappingExists_WhenCreateCalled_SaveIsCalled() throws ValidationFailureException {
         // arrange
-        var mapping = new Mapping(LABEL, TYPE, ABSTRACTION);
+        var mapping = new Mapping(label, type, abstraction);
 
         // act
         patternCrudService.createMapping(mapping);
@@ -111,11 +111,12 @@ public class MappingCrudServiceTests {
     }
 
     @Test(expected = ValidationFailureException.class)
-    public void givenAMappingAlreadyExists_WhenUpdateCalled_ExceptionIsThrown() throws ValidationFailureException, NotFoundException {
+    public void givenAMappingAlreadyExists_WhenUpdateCalled_ExceptionIsThrown()
+            throws ValidationFailureException, NotFoundException {
         // arrange
-        var mapping = new Mapping(LABEL, TYPE, ABSTRACTION);
-        var mapping2 = new Mapping(LABEL, TYPE, ABSTRACTION);
-        when(patternRepository.findByLabelAndType(LABEL, TYPE)).thenReturn(Optional.of(mapping));
+        var mapping = new Mapping(label, type, abstraction);
+        var mapping2 = new Mapping(label, type, abstraction);
+        when(patternRepository.findByLabelAndType(label, type)).thenReturn(Optional.of(mapping));
         when(patternRepository.findById((long) 0)).thenReturn(Optional.of(mapping));
 
         // act
@@ -125,9 +126,10 @@ public class MappingCrudServiceTests {
     }
 
     @Test(expected = NotFoundException.class)
-    public void givenNoMappingExists_WhenUpdateCalled_NotFoundExceptionIsThrown() throws ValidationFailureException, NotFoundException {
+    public void givenNoMappingExists_WhenUpdateCalled_NotFoundExceptionIsThrown()
+            throws ValidationFailureException, NotFoundException {
         // arrange
-        var mapping = new Mapping(LABEL, TYPE, ABSTRACTION);
+        var mapping = new Mapping(label, type, abstraction);
 
         // act
         patternCrudService.updateMapping(mapping);
@@ -136,9 +138,10 @@ public class MappingCrudServiceTests {
     }
 
     @Test
-    public void givenAMappingExists_WhenUpdateCalled_SaveIsCalled() throws ValidationFailureException, NotFoundException {
+    public void givenAMappingExists_WhenUpdateCalled_SaveIsCalled()
+            throws ValidationFailureException, NotFoundException {
         // arrange
-        var mapping = new Mapping(LABEL, TYPE, ABSTRACTION);
+        var mapping = new Mapping(label, type, abstraction);
         when(patternRepository.findById((long) 0)).thenReturn(Optional.of(mapping));
 
         // act

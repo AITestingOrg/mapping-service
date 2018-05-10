@@ -1,5 +1,8 @@
 package org.aist.aide.mappingservice.service.controllers;
 
+import java.util.List;
+import java.util.logging.Logger;
+import javax.validation.Valid;
 import org.aist.aide.mappingservice.domain.exceptions.NotFoundException;
 import org.aist.aide.mappingservice.domain.exceptions.ValidationFailureException;
 import org.aist.aide.mappingservice.domain.models.Mapping;
@@ -9,14 +12,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import java.util.List;
-import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("api/v1/mapping")
 public class MappingController {
-    private final static Logger LOGGER = Logger.getLogger(MappingController.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(MappingController.class.getName());
     private MappingCrudService mappingCrudService;
 
     public MappingController(@Autowired MappingCrudService mappingCrudService) {
@@ -53,7 +53,7 @@ public class MappingController {
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity deleteMapping(@RequestParam long id) {
+    public ResponseEntity deleteMapping(@PathVariable long id) {
         LOGGER.info(String.format("DELETE request for Mapping with id %s.", id));
         try {
             mappingCrudService.deleteMapping(id);
@@ -64,7 +64,7 @@ public class MappingController {
     }
 
     @RequestMapping(path = "/", method = RequestMethod.PUT)
-    public ResponseEntity updateMapping(@Valid @RequestBody Mapping mapping) {
+    public ResponseEntity updateMapping(@Valid @PathVariable Mapping mapping) {
         LOGGER.info(String.format("PUT request for Mapping %s.", mapping));
         try {
             mappingCrudService.updateMapping(mapping);
