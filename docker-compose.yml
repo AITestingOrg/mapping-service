@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  mappingservice:
+    build: ./
+    volumes:
+      - ./src:/usr/src/app
+    ports:
+      - '8080:8080'
+    links:
+      - postgres
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: 'mapping_db'
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_USER: "postgres"
+      PGDATA: ./postgres-data
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./db_volume:/var/lib/postgresql
+  discoveryservice:
+    image: springcloud/eureka
+    ports:
+      - "8761:8761"
