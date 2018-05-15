@@ -64,7 +64,7 @@ public class MappingControllerTests {
         // assert
         verify(mappingCrudService, times(1)).deleteMapping(1);
     }
-    
+
     @Test
     public void givenAnUpdateRequest_ThenServiceUpdateIsCalled() throws ValidationFailureException, NotFoundException {
         // act
