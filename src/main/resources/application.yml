@@ -25,7 +25,7 @@ logging:
 spring:
   profiles: test
   datasource:
-    url: jdbc:postgresql://localhost:5432/mapping_db
+    url: jdbc:postgresql://localhost:5433/mapping_db
     username: postgres
     password: postgres
     platform: POSTGRESQL
