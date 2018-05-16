@@ -1,0 +1,9 @@
+language: java
+sudo: required
+
+before_install:
+  - wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
+  - docker-compose -f docker-compose-test.yml up -d
+
+install: . ./install-jdk.sh -F 10 -L GPL
+
