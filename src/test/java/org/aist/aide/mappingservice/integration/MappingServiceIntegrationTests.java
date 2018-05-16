@@ -2,8 +2,6 @@ package org.aist.aide.mappingservice.integration;
 
 import static org.aist.aide.mappingservice.utils.TestsConstants.*;
 
-import java.util.List;
-import org.aist.aide.mappingservice.domain.models.Mapping;
 import org.aist.aide.mappingservice.service.controllers.MappingController;
 import org.junit.After;
 import org.junit.Assert;
@@ -12,7 +10,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -27,20 +24,22 @@ public class MappingServiceIntegrationTests {
 
     @After
     public void tearDown() {
-        mappingController.deleteMapping(1);
-        mappingController.deleteMapping(2);
+        var everything = mappingController.getMappings().getBody();
+        for (var mapping: everything) {
+            mappingController.deleteMapping(mapping.getId());
+        }
     }
 
     @Test
     public void givenDbEmpty_WhenCreateIsCalled_EntryIsCreated() {
         //arrange
-        List<Mapping> resultsEmpty = mappingController.getMappings().getBody();
+        var resultsEmpty = mappingController.getMappings().getBody();
 
         //act
         mappingController.createMapping(mapping);
 
         //assert
-        List<Mapping> resultsInDB = mappingController.getMappings().getBody();
+        var resultsInDB = mappingController.getMappings().getBody();
         Assert.assertTrue(resultsEmpty.isEmpty());
         Assert.assertFalse(resultsInDB.isEmpty());
     }
@@ -50,7 +49,7 @@ public class MappingServiceIntegrationTests {
         //arrange
 
         //act
-        ResponseEntity<Mapping> result = mappingController.getMapping(label, abstraction);
+        var result = mappingController.getMapping(label, abstraction);
 
         //assert
         Assert.assertEquals(result.getStatusCode(), HttpStatus.NOT_FOUND);
@@ -62,7 +61,7 @@ public class MappingServiceIntegrationTests {
         mappingController.createMapping(mapping);
 
         //act
-        ResponseEntity<Mapping> result = mappingController.getMapping(label,type);
+        var result = mappingController.getMapping(label,type);
 
         //assert
         Assert.assertEquals(result.getStatusCode(), HttpStatus.OK);
@@ -73,14 +72,14 @@ public class MappingServiceIntegrationTests {
     public void givenItemInDb_WhenDeleteIsCalled_ItemIsRemoved() {
         //arrange
         mappingController.createMapping(mapping);
-        ResponseEntity<Mapping> resultInDB = mappingController.getMapping(label,type);
+        var resultInDB = mappingController.getMapping(label,type);
 
         //act
         mappingController.deleteMapping(resultInDB.getBody().getId());
 
         //assert
         Assert.assertEquals(resultInDB.getStatusCode(), HttpStatus.OK);
-        ResponseEntity<Mapping> resultNotInDB = mappingController.getMapping(label,type);
+        var resultNotInDB = mappingController.getMapping(label,type);
         Assert.assertEquals(resultNotInDB.getStatusCode(), HttpStatus.NOT_FOUND);
     }
 
@@ -89,7 +88,7 @@ public class MappingServiceIntegrationTests {
         //arrange
 
         //act
-        ResponseEntity response = mappingController.deleteMapping(999);
+        var response = mappingController.deleteMapping(999);
 
         //assert
         Assert.assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND);
@@ -99,7 +98,7 @@ public class MappingServiceIntegrationTests {
     public void givenItemInDb_WhenUpdateIsCalled_ItemIsUpdated() {
         //arrange
         mappingController.createMapping(mapping);
-        Mapping mappingInDB = mappingController.getMapping(label,type).getBody();
+        var mappingInDB = mappingController.getMapping(label,type).getBody();
         mappingInDB.setType(type2);
         mappingInDB.setLabel(label2);
         mappingInDB.setAbstraction(abstraction2);
@@ -108,7 +107,7 @@ public class MappingServiceIntegrationTests {
         mappingController.updateMapping(mappingInDB);
 
         //assert
-        ResponseEntity<Mapping> updatedMapping = mappingController.getMapping(label2,type2);
+        var updatedMapping = mappingController.getMapping(label2,type2);
         Assert.assertEquals(updatedMapping.getStatusCode(), HttpStatus.OK);
         Assert.assertTrue(updatedMapping.getBody().compareTo(mapping2));
     }
@@ -118,13 +117,13 @@ public class MappingServiceIntegrationTests {
         //arrange
         mappingController.createMapping(mapping);
         mappingController.createMapping(mapping2);
-        Mapping mappingInDB = mappingController.getMapping(label,type).getBody();
+        var mappingInDB = mappingController.getMapping(label,type).getBody();
         mappingInDB.setType(type2);
         mappingInDB.setLabel(label2);
         mappingInDB.setAbstraction(abstraction2);
 
         //act
-        ResponseEntity response = mappingController.updateMapping(mappingInDB);
+        var response = mappingController.updateMapping(mappingInDB);
 
         //assert
         Assert.assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
@@ -134,12 +133,12 @@ public class MappingServiceIntegrationTests {
     public void givenItemNotInDb_WhenUpdateIsCalled_RespondNotFound() {
         //arrange
         mappingController.createMapping(mapping);
-        Mapping mappingInDB = mappingController.getMapping(label,type).getBody();
+        var mappingInDB = mappingController.getMapping(label,type).getBody();
         mappingInDB.setType(type2);
         mappingController.deleteMapping(mappingInDB.getId());
 
         //act
-        ResponseEntity response = mappingController.updateMapping(mappingInDB);
+        var response = mappingController.updateMapping(mappingInDB);
 
         //assert
         Assert.assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND);

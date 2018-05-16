@@ -38,12 +38,8 @@ public class MappingCrudServiceTests {
 
     @Test(expected = NotFoundException.class)
     public void givenAMappingDoesNotExists_WhenFindCalled_ExceptionIsThrown() throws NotFoundException {
-        // arrange
-
         // act
         mappingCrudService.getMapping(label, type);
-
-        // assert
     }
 
     @Test
@@ -61,12 +57,8 @@ public class MappingCrudServiceTests {
 
     @Test(expected = NotFoundException.class)
     public void givenNoMappingExists_WhenDeleteCalled_ExceptionIsThrown() throws NotFoundException {
-        // arrange
-
         // act
         mappingCrudService.deleteMapping(1);
-
-        // assert
     }
 
     @Test
@@ -90,8 +82,6 @@ public class MappingCrudServiceTests {
 
         // act
         mappingCrudService.createMapping(mapping);
-
-        // assert
     }
 
     @Test
@@ -117,8 +107,6 @@ public class MappingCrudServiceTests {
 
         // act
         mappingCrudService.updateMapping(mapping2);
-
-        // assert
     }
 
     @Test(expected = NotFoundException.class)
@@ -129,8 +117,6 @@ public class MappingCrudServiceTests {
 
         // act
         mappingCrudService.updateMapping(mapping);
-
-        // assert
     }
 
     @Test

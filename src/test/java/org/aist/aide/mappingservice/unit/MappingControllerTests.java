@@ -19,7 +19,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MappingControllerTests {
-
     @Mock
     private MappingCrudService mappingCrudService;
 
@@ -33,8 +32,6 @@ public class MappingControllerTests {
 
     @Test
     public void givenAGetAllRequest_ThenServiceGetMappingsIsCalled() {
-        // arrange
-
         // act
         mappingController.getMappings();
 
