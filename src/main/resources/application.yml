@@ -1,4 +1,6 @@
 spring:
+  application:
+      name: mappingservice
   datasource:
     url: jdbc:postgresql://postgres:5432/mapping_db
     username: postgres
@@ -14,6 +16,12 @@ spring:
         temp:
           use_jdbc_metadata_defaults: false
     database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://discoveryservice:8761/eureka/
+    fetch-registry: false
 logging:
   level:
     org:
@@ -39,6 +47,11 @@ spring:
         temp:
           use_jdbc_metadata_defaults: false
     database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
 logging:
   level:
     org:

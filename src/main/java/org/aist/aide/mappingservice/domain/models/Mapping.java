@@ -49,4 +49,26 @@ public class Mapping implements Serializable {
     public String getAbstraction() {
         return abstraction;
     }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setAbstraction(String abstraction) {
+        this.abstraction = abstraction;
+    }
+
+    public boolean compareTo(Mapping that) {
+        if (!this.type.equals(that.getType())) {
+            return false;
+        }
+        if (!this.label.equals(that.getLabel())) {
+            return false;
+        }
+        return this.abstraction.equals(that.getAbstraction());
+    }
 }
