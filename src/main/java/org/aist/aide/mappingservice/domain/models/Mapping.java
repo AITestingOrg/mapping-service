@@ -29,6 +29,13 @@ public class Mapping implements Serializable {
         this.abstraction = abstraction;
     }
 
+    public Mapping(long id, @NotBlank String label, @NotBlank String type, String abstraction) {
+        this.id = id;
+        this.label = label;
+        this.type = type;
+        this.abstraction = abstraction;
+    }
+
     public Mapping(@NotBlank String label, @NotBlank String type) {
         this.label = label;
         this.type = type;

@@ -1,5 +1,6 @@
 package org.aist.aide.mappingservice.unit;
 
+import static org.aist.aide.mappingservice.utils.TestsConstants.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
@@ -29,10 +30,6 @@ public class MappingCrudServiceTests {
 
     @InjectMocks
     private MappingCrudService mappingCrudService;
-
-    private final String label = "label";
-    private final String type = "type";
-    private final String abstraction = "abstraction";
 
     @Before
     public void initMocks() {
@@ -113,10 +110,10 @@ public class MappingCrudServiceTests {
     public void givenAMappingAlreadyExists_WhenUpdateCalled_ExceptionIsThrown()
             throws ValidationFailureException, NotFoundException {
         // arrange
-        var mapping = new Mapping(label, type, abstraction);
-        var mapping2 = new Mapping(label, type, abstraction);
+        var mapping = new Mapping(1, label, type, abstraction);
+        var mapping2 = new Mapping(2, label, type, abstraction2);
         when(mappingRepository.findByLabelAndType(label, type)).thenReturn(Optional.of(mapping));
-        when(mappingRepository.findById((long) 0)).thenReturn(Optional.of(mapping));
+        when(mappingRepository.findById((long) 2)).thenReturn(Optional.of(mapping2));
 
         // act
         mappingCrudService.updateMapping(mapping2);

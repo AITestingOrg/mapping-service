@@ -1,4 +1,7 @@
-# mapping-service
+# Mapping Service
+
+[![Build Status](https://travis-ci.org/AITestingOrg/mapping-service.svg?branch=master)](https://travis-ci.org/AITestingOrg/mapping-service)
+
 This service is meant to create, store, return and update mappings of input and abstractions to services.
 
 ## Features

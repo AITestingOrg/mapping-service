@@ -59,7 +59,7 @@ public class MappingCrudService {
         }
         mappingToUpdate = mappingRepository.findByLabelAndType(label, type);
         if (mappingToUpdate.isPresent()) {
-            if (mappingToUpdate.get().getId() == id) {
+            if (mappingToUpdate.get().getId() != id) {
                 LOGGER.warning(
                         String.format("Different mapping for label %s and type %s already exists.", label, type));
                 throw new ValidationFailureException(
