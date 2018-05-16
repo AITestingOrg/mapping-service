@@ -1,11 +1,11 @@
 package org.aist.aide.mappingservice.unit;
 
+import static org.aist.aide.mappingservice.utils.TestsConstants.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import org.aist.aide.mappingservice.domain.exceptions.NotFoundException;
 import org.aist.aide.mappingservice.domain.exceptions.ValidationFailureException;
-import org.aist.aide.mappingservice.domain.models.Mapping;
 import org.aist.aide.mappingservice.domain.services.MappingCrudService;
 import org.aist.aide.mappingservice.service.controllers.MappingController;
 import org.junit.Before;
@@ -19,17 +19,11 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MappingControllerTests {
-
     @Mock
     private MappingCrudService mappingCrudService;
 
     @InjectMocks
     private MappingController mappingController;
-
-    private final String label = "label";
-    private final String type = "type";
-    private final String abstraction = "abstraction";
-    private final Mapping mapping = new Mapping(label, type, abstraction);
 
     @Before
     public void initMocks() {
@@ -38,8 +32,6 @@ public class MappingControllerTests {
 
     @Test
     public void givenAGetAllRequest_ThenServiceGetMappingsIsCalled() {
-        // arrange
-
         // act
         mappingController.getMappings();
 
