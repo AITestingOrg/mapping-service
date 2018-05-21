@@ -15,5 +15,7 @@ after_success:
   - docker login -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD
   - export REPO=aista/mapping-service
   - export TAG=`if [ "$ACTUAL_BRANCH" == "master" ]; then echo "latest";else echo ""; fi`
+  - set +e
   - docker build -f Dockerfile -t $REPO:$TAG .
   - docker push $REPO
+  - set -e
