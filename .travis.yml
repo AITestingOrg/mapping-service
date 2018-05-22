@@ -1,8 +1,9 @@
 language: java
 sudo: required
 before_install:
-- wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
-- docker-compose -f docker-compose-test.yml up -d
+  - docker login -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD
+  - wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
+  - docker-compose -f docker-compose-test.yml up -d
 install: ". ./install-jdk.sh -F 10 -L GPL"
 env:
   global:
@@ -11,5 +12,6 @@ env:
 after_success:
   - docker login -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD
   - set +e
-  - docker build -f Dockerfile -t aista/mapping-service:$TRAVIS_TAG .
+  - export REPO=aista/mapping-service
+  - docker build -f Dockerfile -t $REPO:$TRAVIS_TAG --rm=false .
   - docker push $REPO
