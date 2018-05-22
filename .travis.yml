@@ -1,9 +1,15 @@
 language: java
 sudo: required
-
 before_install:
-  - wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
-  - docker-compose -f docker-compose-test.yml up -d
-
-install: . ./install-jdk.sh -F 10 -L GPL
-
+- wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
+- docker-compose -f docker-compose-test.yml up -d
+install: ". ./install-jdk.sh -F 10 -L GPL"
+env:
+  global:
+  - secure: KkjFeT1WoodmOJEyreHJpvv5xvbYlDxgmxqiaO+5i/YY8MAPhtsBKsF6ZuN0QUQwiV3irWlJTUsijBijUnyFMqS/tg/xiruLh9t3TPOnI/vrdH/V3BOebV0SZiGWdDlPNXRFxnYAZam0c5FnBdwadTFKYoZDDYsqOtgHwfGCHtcSvcj8eFahwmfwmDzONgfq0BCK+pla42j17zV72scmknsKrCKYSPgqdPRHUqGdOAki+ON18UxMcir1V+VtLm12h4HE1129fSXJ99JNQGKc6zmnvOaJ9b3+J5q1hdlTMHW+5hwWzuXjy7naEG0OCbC9oueMT0CKe1+qtixeMte5kKDSZ8KESZszBeewgq5adQJPhMlfTK4DFHQZXu2HKt1wTnf86CDdxaUMWQlDno3TAm/zJYB5omyIDP7GN9GzyhG5jFx9Fo75qf8cdmRelpg1jxMBp9PVPVIR9mwc5YaDw43ngnhKRu8TgHDQ03tAmzMx6QTEhEFOzazsctw7Iwq7gfDiZsfSHYmXIJsvkM3h0dELE1L+LwJqVKjtAahoYwielvnaaq8fR50AO1EiDTEMzjBIhcCbO2edAPyeKX7Zuf0goxoHXY4AwIvVCEq+t6fT/GQwzA/byH5HK7oNhd7YQI/60E+UZQmlTmuFc9/IYSdIYeOQXQm+K57PY8NgHFU=
+  - secure: Ieeq2tUqFMV2zmzJ1h1TXuoOTT9kenSZWMy08HfpKAXN5AC0LFI6xWpdqTf1MNxCOY+uRzLE8gGEa2BaiqGfBNqfz3I1lWNkYaIT8VyxrrRuIX6O82FTXy+KHmREy9jJ7DorgfcME3Wmrsfr1Ez5ZPrYJtggZbRJb9eJAffjRgns0ChOlckwp5qGtP2arID2cpSIPPvix8ePrsbO7468cTVy8qZQyJ3szNpgLHSKk5qkbfaaZ/8UIrTGu/BC97CjGZfD1WstYsGUgKMOxw7p6NCCt82C37RHVwbHgF7oTSl5gExmNK7yUhPgqdEYSIFoRmL3MSQ/HLukulnENXWnCGptGog9MIWQ20D0MFF+mUTEvjPbnNI8ec8JDgm8AugeSceXGLH5ODg5Kr5seaBCAm5soykoAjwU7VHNbSgOAj4MulDHcMmyvjxluYzlBweyVekN9KaNH8B1tUmibePii5AdyDsqtF7exGb1aNxSiA9QXtjDQ2kSwsgAM3+4AjlGcNjTKP3Bd41US12Il9lbHXp9B6vZniPA18M8PKBnCTiqMcQBSdl2uKnOoI5/kdBz665Ih650ooWt3n/dFvDHckdvbrm10+L/KMl0EkTToA+NwXunzp4OCmfYYLLKFRRBV++KWV2ji5y56XzP7db2dlw/IbnV7gaIlnYiri3/gds=
+after_success:
+  - docker login -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD
+  - set +e
+  - docker build -f Dockerfile -t aista/mapping-service:$TRAVIS_TAG .
+  - docker push $REPO
