@@ -2,6 +2,7 @@ package org.aist.aide.mappingservice.service.controllers;
 
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javax.validation.Valid;
 import org.aist.aide.mappingservice.domain.exceptions.NotFoundException;
 import org.aist.aide.mappingservice.domain.exceptions.ValidationFailureException;
@@ -23,11 +24,25 @@ public class MappingController {
         this.mappingCrudService = mappingCrudService;
     }
 
-    @RequestMapping("/")
+    @GetMapping("/")
     public ResponseEntity<List<Mapping>> getMappings() {
         LOGGER.info("GET request for all Mappings.");
         var mappings = mappingCrudService.getMappings();
         return new ResponseEntity<>(mappings, HttpStatus.OK);
+    }
+
+    @GetMapping("/known")
+    public ResponseEntity<List<Mapping>> getKnownMappings() {
+        LOGGER.info("GET request for all known Mappings.");
+        var knownMappings = mappingCrudService.getKnown();
+        return new ResponseEntity<>(knownMappings, HttpStatus.OK);
+    }
+
+    @GetMapping("/unknown")
+    public ResponseEntity<List<Mapping>> getUnknownMappings() {
+        LOGGER.info("GET request for all unknown Mappings.");
+        var unknownMappings = mappingCrudService.getUnknown();
+        return new ResponseEntity<>(unknownMappings, HttpStatus.OK);
     }
 
     @RequestMapping("/{label}/{type}")
@@ -41,7 +56,7 @@ public class MappingController {
         }
     }
 
-    @RequestMapping(path = "/", method = RequestMethod.POST)
+    @PostMapping(path = "/")
     public ResponseEntity createMapping(@Valid @RequestBody Mapping mapping) {
         LOGGER.info(String.format("POST request with Mapping %s.", mapping));
         try {
@@ -49,10 +64,10 @@ public class MappingController {
         } catch (ValidationFailureException e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity(HttpStatus.CREATED);
+        return new ResponseEntity<>(mapping.getId(), HttpStatus.CREATED);
     }
 
-    @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity deleteMapping(@PathVariable long id) {
         LOGGER.info(String.format("DELETE request for Mapping with id %s.", id));
         try {
@@ -63,7 +78,7 @@ public class MappingController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/", method = RequestMethod.PUT)
+    @PutMapping(path = "/")
     public ResponseEntity updateMapping(@Valid @PathVariable Mapping mapping) {
         LOGGER.info(String.format("PUT request for Mapping %s.", mapping));
         try {

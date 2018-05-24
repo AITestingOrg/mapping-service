@@ -3,8 +3,10 @@ sudo: required
 before_install:
   - docker login -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD
   - wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
-  - docker-compose -f docker-compose-test.yml up -d
 install: ". ./install-jdk.sh -F 10 -L GPL"
+before_script:
+- sudo service postgresql stop
+- docker-compose -f docker-compose-test.yml up -d
 env:
   global:
   - secure: KkjFeT1WoodmOJEyreHJpvv5xvbYlDxgmxqiaO+5i/YY8MAPhtsBKsF6ZuN0QUQwiV3irWlJTUsijBijUnyFMqS/tg/xiruLh9t3TPOnI/vrdH/V3BOebV0SZiGWdDlPNXRFxnYAZam0c5FnBdwadTFKYoZDDYsqOtgHwfGCHtcSvcj8eFahwmfwmDzONgfq0BCK+pla42j17zV72scmknsKrCKYSPgqdPRHUqGdOAki+ON18UxMcir1V+VtLm12h4HE1129fSXJ99JNQGKc6zmnvOaJ9b3+J5q1hdlTMHW+5hwWzuXjy7naEG0OCbC9oueMT0CKe1+qtixeMte5kKDSZ8KESZszBeewgq5adQJPhMlfTK4DFHQZXu2HKt1wTnf86CDdxaUMWQlDno3TAm/zJYB5omyIDP7GN9GzyhG5jFx9Fo75qf8cdmRelpg1jxMBp9PVPVIR9mwc5YaDw43ngnhKRu8TgHDQ03tAmzMx6QTEhEFOzazsctw7Iwq7gfDiZsfSHYmXIJsvkM3h0dELE1L+LwJqVKjtAahoYwielvnaaq8fR50AO1EiDTEMzjBIhcCbO2edAPyeKX7Zuf0goxoHXY4AwIvVCEq+t6fT/GQwzA/byH5HK7oNhd7YQI/60E+UZQmlTmuFc9/IYSdIYeOQXQm+K57PY8NgHFU=
