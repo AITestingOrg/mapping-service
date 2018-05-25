@@ -8,21 +8,20 @@ services:
     ports:
       - '8080:8080'
     links:
-      - postgres
+      - mongo
     depends_on:
-      - postgres
-  postgres:
-    image: postgres
-    restart: always
+      - mongo
+  mongo:
+    image: mongo:latest
     environment:
-      POSTGRES_DB: 'mapping_db'
-      POSTGRES_PASSWORD: "postgres"
-      POSTGRES_USER: "postgres"
-      PGDATA: ./postgres-data
-    ports:
-      - '5432:5432'
+     - MONGO_DATA_DIR=/data/db
+     - MONGO_LOG_DIR=/dev/null
+     - MONGODB_USER=user
+     - MONGODB_PASS=pass
     volumes:
-      - ./db_volume:/var/lib/postgresql
+     - ./data/db:/data/db
+    ports:
+     - '27017:27017'
   discoveryservice:
     image: springcloud/eureka
     ports:
