@@ -1,6 +1,8 @@
 spring:
+  application:
+      name: mappingservice
   datasource:
-    url: jdbc:postgresql://localhost:5432/mapping_db
+    url: jdbc:postgresql://postgres:5432/mapping_db
     username: postgres
     password: postgres
     platform: POSTGRESQL
@@ -18,7 +20,8 @@ spring:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://discoveryservice:8761/eureka/
+    fetch-registry: false
 logging:
   level:
     org:

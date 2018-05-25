@@ -10,13 +10,11 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ActiveProfiles(profiles = "test")
 public class MappingServiceIntegrationTests {
 
     @Autowired
@@ -69,6 +67,34 @@ public class MappingServiceIntegrationTests {
     }
 
     @Test
+    public void givenItemInDb_WhenGetKnownIsCalled_ReturnOnlyKnown() {
+        //arrange
+        mappingController.createMapping(mapping);
+        mappingController.createMapping(mapping2);
+
+        //act
+        var result = mappingController.getKnownMappings();
+
+        //assert
+        Assert.assertEquals(result.getStatusCode(), HttpStatus.OK);
+        Assert.assertTrue(result.getBody().get(0).compareTo(mapping));
+    }
+
+    @Test
+    public void givenItemInDb_WhenGetUnknownIsCalled_ReturnOnlyUnknown() {
+        //arrange
+        mappingController.createMapping(mapping);
+        mappingController.createMapping(mapping2);
+
+        //act
+        var result = mappingController.getUnknownMappings();
+
+        //assert
+        Assert.assertEquals(result.getStatusCode(), HttpStatus.OK);
+        Assert.assertTrue(result.getBody().get(0).compareTo(mapping2));
+    }
+
+    @Test
     public void givenItemInDb_WhenDeleteIsCalled_ItemIsRemoved() {
         //arrange
         mappingController.createMapping(mapping);
@@ -109,7 +135,7 @@ public class MappingServiceIntegrationTests {
         //assert
         var updatedMapping = mappingController.getMapping(label2,type2);
         Assert.assertEquals(updatedMapping.getStatusCode(), HttpStatus.OK);
-        Assert.assertTrue(updatedMapping.getBody().compareTo(mapping2));
+        Assert.assertTrue(updatedMapping.getBody().compareTo(mappingInDB));
     }
 
     @Test

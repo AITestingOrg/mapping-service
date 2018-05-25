@@ -3,6 +3,8 @@ package org.aist.aide.mappingservice.domain.services;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+
 import org.aist.aide.mappingservice.domain.exceptions.NotFoundException;
 import org.aist.aide.mappingservice.domain.exceptions.ValidationFailureException;
 import org.aist.aide.mappingservice.domain.models.Mapping;
@@ -24,6 +26,18 @@ public class MappingCrudService {
         List<Mapping> target = new ArrayList<>();
         mappingRepository.findAll().forEach(target::add);
         return target;
+    }
+
+    public List<Mapping> getKnown() {
+        var mappings = getMappings();
+        return mappings.stream().filter(x -> x.getAbstraction() != null)
+                .collect(Collectors.toList());
+    }
+
+    public List<Mapping> getUnknown() {
+        var mappings = getMappings();
+        return mappings.stream().filter(x -> x.getAbstraction() == null)
+                .collect(Collectors.toList());
     }
 
     public Mapping getMapping(String label, String type) throws NotFoundException {
