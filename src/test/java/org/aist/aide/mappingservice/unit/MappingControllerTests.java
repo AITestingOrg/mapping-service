@@ -40,6 +40,24 @@ public class MappingControllerTests {
     }
 
     @Test
+    public void givenAGetKnownRequest_ThenServiceGetKnownIsCalled() {
+        // act
+        mappingController.getKnownMappings();
+
+        // assert
+        verify(mappingCrudService, times(1)).getKnown();
+    }
+
+    @Test
+    public void givenAGetUnknownRequest_ThenServiceGetUnknownIsCalled() {
+        // act
+        mappingController.getUnknownMappings();
+
+        // assert
+        verify(mappingCrudService, times(1)).getUnknown();
+    }
+
+    @Test
     public void givenACreateRequest_ThenServiceCreateIsCalled() throws ValidationFailureException {
         // act
         mappingController.createMapping(mapping);

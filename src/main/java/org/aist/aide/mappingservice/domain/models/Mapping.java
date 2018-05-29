@@ -20,6 +20,8 @@ public class Mapping implements Serializable {
 
     private String abstraction;
 
+    private Service service;
+
     public Mapping() {
     }
 
@@ -57,6 +59,10 @@ public class Mapping implements Serializable {
         return abstraction;
     }
 
+    public Service getService() {
+        return service;
+    }
+
     public void setLabel(String label) {
         this.label = label;
     }
@@ -69,6 +75,10 @@ public class Mapping implements Serializable {
         this.abstraction = abstraction;
     }
 
+    public void setService(Service service) {
+        this.service = service;
+    }
+
     public boolean compareTo(Mapping that) {
         if (!this.type.equals(that.getType())) {
             return false;
@@ -76,6 +86,9 @@ public class Mapping implements Serializable {
         if (!this.label.equals(that.getLabel())) {
             return false;
         }
-        return this.abstraction.equals(that.getAbstraction());
+        if (abstraction != null) {
+            return this.abstraction.equals(that.getAbstraction());
+        }
+        return that.getAbstraction() == null;
     }
 }
