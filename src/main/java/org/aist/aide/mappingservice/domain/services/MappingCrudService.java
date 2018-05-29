@@ -1,12 +1,12 @@
 package org.aist.aide.mappingservice.domain.services;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.aist.aide.mappingservice.domain.exceptions.NotFoundException;
 import org.aist.aide.mappingservice.domain.exceptions.ValidationFailureException;
+import org.aist.aide.mappingservice.domain.models.Classifier;
 import org.aist.aide.mappingservice.domain.models.Mapping;
 import org.aist.aide.mappingservice.service.repositories.MappingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,20 +23,18 @@ public class MappingCrudService {
     }
 
     public List<Mapping> getMappings() {
-        List<Mapping> target = new ArrayList<>();
-        mappingRepository.findAll().forEach(target::add);
-        return target;
+        return mappingRepository.findAll();
     }
 
     public List<Mapping> getKnown() {
         var mappings = getMappings();
-        return mappings.stream().filter(x -> x.getAbstraction() != null)
+        return mappings.stream().filter(x -> !x.getClassifiers().isEmpty())
                 .collect(Collectors.toList());
     }
 
     public List<Mapping> getUnknown() {
         var mappings = getMappings();
-        return mappings.stream().filter(x -> x.getAbstraction() == null)
+        return mappings.stream().filter(x -> x.getClassifiers().isEmpty())
                 .collect(Collectors.toList());
     }
 
@@ -48,6 +46,16 @@ public class MappingCrudService {
         LOGGER.warning(String.format("Mapping for label %s and type %s does not exist.", label, type));
         throw new NotFoundException(
                 String.format("Failed to find mapping for label %s and type %s does.", label,  type));
+    }
+
+    public Mapping getMapping(String id) throws NotFoundException {
+        var mapping = mappingRepository.findById(id);
+        if (mapping.isPresent()) {
+            return mapping.get();
+        }
+        LOGGER.warning(String.format("Mapping for id %s does not exist.", id));
+        throw new NotFoundException(
+                String.format("Failed to find mapping for id %s.", id));
     }
 
     public void createMapping(Mapping mapping) throws ValidationFailureException {
@@ -73,7 +81,7 @@ public class MappingCrudService {
         }
         mappingToUpdate = mappingRepository.findByLabelAndType(label, type);
         if (mappingToUpdate.isPresent()) {
-            if (mappingToUpdate.get().getId() != id) {
+            if (!mappingToUpdate.get().getId().equals(id)) {
                 LOGGER.warning(
                         String.format("Different mapping for label %s and type %s already exists.", label, type));
                 throw new ValidationFailureException(
@@ -83,7 +91,27 @@ public class MappingCrudService {
         mappingRepository.save(mapping);
     }
 
-    public void deleteMapping(long id) throws NotFoundException {
+    public void upsertClassifier(String id, Classifier classifier)
+            throws NotFoundException {
+        var mappingToUpdate = mappingRepository.findById(id);
+        if (!mappingToUpdate.isPresent()) {
+            LOGGER.warning(String.format("Mapping with id %s does not exist, cannot update.", id));
+            throw new NotFoundException(String.format("No mapping found with id %s", id));
+        }
+        var mapping = mappingToUpdate.get();
+        var classifiers = mapping.getClassifiers();
+        for (var storedClassifier : classifiers) {
+            if (storedClassifier.getService() == classifier.getService()) {
+                classifiers.remove(storedClassifier);
+            }
+        }
+        classifiers.add(classifier);
+        mapping.setClassifiers(classifiers);
+        mappingRepository.save(mapping);
+    }
+
+
+    public void deleteMapping(String id) throws NotFoundException {
         var mapping = mappingRepository.findById(id);
         if (!mapping.isPresent()) {
             LOGGER.warning(String.format("Mapping with id %s does not exist, cannot delete.", id));

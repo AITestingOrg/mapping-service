@@ -1,30 +1,16 @@
 spring:
   application:
-      name: mappingservice
-  datasource:
-    url: jdbc:postgresql://postgres:5432/mapping_db
-    username: postgres
-    password: postgres
-    platform: POSTGRESQL
-    driver-class-name: org.postgresql.Driver
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-    show-sql: true
-    properties:
-      hibernate:
-        temp:
-          use_jdbc_metadata_defaults: false
-    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+    name: mappingservice
+  data:
+    mongodb:
+      uri: mongodb://mongo/mapping_service # Mongo database URI. When set, host and port are ignored.
+      port: 27017 # Mongo server port.
+      enabled: true # Enable Mongo repositories.
+      username: user # Login user of the mongo server.
+      password: pass # Login password of the mongo server.
 
 eureka:
   client:
     serviceUrl:
       defaultZone: http://discoveryservice:8761/eureka/
     fetch-registry: false
-logging:
-  level:
-    org:
-      hibernate:
-        SQL: DEBUG
-        type: TRACE

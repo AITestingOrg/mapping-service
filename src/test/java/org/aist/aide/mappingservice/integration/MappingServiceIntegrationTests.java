@@ -44,10 +44,17 @@ public class MappingServiceIntegrationTests {
 
     @Test
     public void givenItemNotInDb_WhenGetIsCalled_RespondNotFound() {
-        //arrange
-
         //act
-        var result = mappingController.getMapping(label, abstraction);
+        var result = mappingController.getMapping(label, type);
+
+        //assert
+        Assert.assertEquals(result.getStatusCode(), HttpStatus.NOT_FOUND);
+    }
+
+    @Test
+    public void givenItemNotInDb_WhenGetByIdIsCalled_RespondNotFound() {
+        //act
+        var result = mappingController.getMapping(id);
 
         //assert
         Assert.assertEquals(result.getStatusCode(), HttpStatus.NOT_FOUND);
@@ -63,7 +70,20 @@ public class MappingServiceIntegrationTests {
 
         //assert
         Assert.assertEquals(result.getStatusCode(), HttpStatus.OK);
-        Assert.assertTrue(result.getBody().compareTo(mapping));
+        Assert.assertEquals(result.getBody(), mapping);
+    }
+
+    @Test
+    public void givenItemInDb_WhenGetByIsCalled_RespondOkAndItemRetrieved() {
+        //arrange
+        mappingController.createMapping(mapping);
+
+        //act
+        var result = mappingController.getMapping(mapping.getId());
+
+        //assert
+        Assert.assertEquals(result.getStatusCode(), HttpStatus.OK);
+        Assert.assertEquals(result.getBody(), mapping);
     }
 
     @Test
@@ -77,7 +97,7 @@ public class MappingServiceIntegrationTests {
 
         //assert
         Assert.assertEquals(result.getStatusCode(), HttpStatus.OK);
-        Assert.assertTrue(result.getBody().get(0).compareTo(mapping));
+        Assert.assertEquals(result.getBody().get(0), mapping);
     }
 
     @Test
@@ -91,7 +111,7 @@ public class MappingServiceIntegrationTests {
 
         //assert
         Assert.assertEquals(result.getStatusCode(), HttpStatus.OK);
-        Assert.assertTrue(result.getBody().get(0).compareTo(mapping2));
+        Assert.assertEquals(result.getBody().get(0), mapping2);
     }
 
     @Test
@@ -111,10 +131,8 @@ public class MappingServiceIntegrationTests {
 
     @Test
     public void givenItemNotInDb_WhenDeleteIsCalled_RespondNotFound() {
-        //arrange
-
         //act
-        var response = mappingController.deleteMapping(999);
+        var response = mappingController.deleteMapping(id);
 
         //assert
         Assert.assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND);
@@ -127,7 +145,6 @@ public class MappingServiceIntegrationTests {
         var mappingInDB = mappingController.getMapping(label,type).getBody();
         mappingInDB.setType(type2);
         mappingInDB.setLabel(label2);
-        mappingInDB.setAbstraction(abstraction2);
 
         //act
         mappingController.updateMapping(mappingInDB);
@@ -135,7 +152,7 @@ public class MappingServiceIntegrationTests {
         //assert
         var updatedMapping = mappingController.getMapping(label2,type2);
         Assert.assertEquals(updatedMapping.getStatusCode(), HttpStatus.OK);
-        Assert.assertTrue(updatedMapping.getBody().compareTo(mappingInDB));
+        Assert.assertEquals(updatedMapping.getBody(), mappingInDB);
     }
 
     @Test
@@ -146,7 +163,6 @@ public class MappingServiceIntegrationTests {
         var mappingInDB = mappingController.getMapping(label,type).getBody();
         mappingInDB.setType(type2);
         mappingInDB.setLabel(label2);
-        mappingInDB.setAbstraction(abstraction2);
 
         //act
         var response = mappingController.updateMapping(mappingInDB);
@@ -157,16 +173,36 @@ public class MappingServiceIntegrationTests {
 
     @Test
     public void givenItemNotInDb_WhenUpdateIsCalled_RespondNotFound() {
-        //arrange
-        mappingController.createMapping(mapping);
-        var mappingInDB = mappingController.getMapping(label,type).getBody();
-        mappingInDB.setType(type2);
-        mappingController.deleteMapping(mappingInDB.getId());
-
         //act
-        var response = mappingController.updateMapping(mappingInDB);
+        var response = mappingController.updateMapping(mapping);
 
         //assert
         Assert.assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND);
+    }
+
+    @Test
+    public void givenItemWithNoClassifier_WhenUpdateClassifierIsCalled_ClassifierIsAdded() {
+        //arrange
+        mappingController.createMapping(mapping2);
+
+        //act
+        mappingController.updateClassifier(mapping2.getId(), classifier);
+
+        //assert
+        var response = mappingController.getMapping(mapping2.getId());
+        Assert.assertTrue(response.getBody().getClassifiers().contains(classifier));
+    }
+
+    @Test
+    public void givenItemWithClassifier_WhenUpdateClassifierIsCalled_ClassifierIsUpdated() {
+        //arrange
+        mappingController.createMapping(mapping);
+
+        //act
+        mappingController.updateClassifier(mapping.getId(), classifierHighScore);
+
+        //assert
+        var response = mappingController.getMapping(mapping.getId());
+        Assert.assertTrue(response.getBody().getClassifiers().contains(classifierHighScore));
     }
 }

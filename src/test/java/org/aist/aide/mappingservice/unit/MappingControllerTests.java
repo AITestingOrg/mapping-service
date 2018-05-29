@@ -69,10 +69,10 @@ public class MappingControllerTests {
     @Test
     public void givenADeleteRequest_ThenServiceDeleteIsCalled()throws NotFoundException {
         // act
-        mappingController.deleteMapping(1);
+        mappingController.deleteMapping(id);
 
         // assert
-        verify(mappingCrudService, times(1)).deleteMapping(1);
+        verify(mappingCrudService, times(1)).deleteMapping(id);
     }
 
     @Test
@@ -82,5 +82,15 @@ public class MappingControllerTests {
 
         // assert
         verify(mappingCrudService, times(1)).updateMapping(mapping);
+    }
+
+
+    @Test
+    public void givenAnUpsertRequest_ThenServiceUpdateIsCalled() throws NotFoundException {
+        // act
+        mappingController.updateClassifier(id, classifier);
+
+        // assert
+        verify(mappingCrudService, times(1)).upsertClassifier(id, classifier);
     }
 }

@@ -4,6 +4,7 @@
 .gradle
 .idea/**/libraries
 .DS_Store
+/data/
 
 ### STS ###
 .apt_generated

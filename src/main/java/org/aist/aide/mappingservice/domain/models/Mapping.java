@@ -1,16 +1,16 @@
 package org.aist.aide.mappingservice.domain.models;
 
-import java.io.Serializable;
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@Entity
-@Table(name = "mapping",
-       uniqueConstraints = {@UniqueConstraint(columnNames = {"label", "type"})})
+import java.io.Serializable;
+import java.util.TreeSet;
+import javax.validation.constraints.NotBlank;
+import org.springframework.data.annotation.Id;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Mapping implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private String id;
 
     @NotBlank
     private String label;
@@ -18,32 +18,34 @@ public class Mapping implements Serializable {
     @NotBlank
     private String type;
 
-    private String abstraction;
+    private TreeSet<Classifier> classifiers;
 
-    private Service service;
+    private String defaultAbstraction;
 
     public Mapping() {
+        classifiers = new TreeSet<>();
     }
 
-    public Mapping(@NotBlank String label, @NotBlank String type, String abstraction) {
-        this.label = label;
-        this.type = type;
-        this.abstraction = abstraction;
-    }
-
-    public Mapping(long id, @NotBlank String label, @NotBlank String type, String abstraction) {
+    public Mapping(String id, @NotBlank String label, @NotBlank String type,
+                   TreeSet<Classifier> classifiers, String defaultAbstraction) {
         this.id = id;
         this.label = label;
         this.type = type;
-        this.abstraction = abstraction;
+        this.classifiers = classifiers;
+        this.defaultAbstraction = defaultAbstraction;
     }
 
     public Mapping(@NotBlank String label, @NotBlank String type) {
         this.label = label;
         this.type = type;
+        classifiers = new TreeSet<>();
     }
 
-    public long getId() {
+    public String getDefaultAbstraction() {
+        return defaultAbstraction;
+    }
+
+    public String getId() {
         return id;
     }
 
@@ -55,12 +57,8 @@ public class Mapping implements Serializable {
         return type;
     }
 
-    public String getAbstraction() {
-        return abstraction;
-    }
-
-    public Service getService() {
-        return service;
+    public TreeSet<Classifier> getClassifiers() {
+        return classifiers;
     }
 
     public void setLabel(String label) {
@@ -71,24 +69,24 @@ public class Mapping implements Serializable {
         this.type = type;
     }
 
-    public void setAbstraction(String abstraction) {
-        this.abstraction = abstraction;
+    public void setDefaultAbstraction(String defaultAbstraction) {
+        this.defaultAbstraction = defaultAbstraction;
     }
 
-    public void setService(Service service) {
-        this.service = service;
+    public void setClassifiers(TreeSet<Classifier> classifiers) {
+        this.classifiers = classifiers;
     }
 
-    public boolean compareTo(Mapping that) {
-        if (!this.type.equals(that.getType())) {
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof Mapping)) {
             return false;
         }
-        if (!this.label.equals(that.getLabel())) {
-            return false;
-        }
-        if (abstraction != null) {
-            return this.abstraction.equals(that.getAbstraction());
-        }
-        return that.getAbstraction() == null;
+        var other = (Mapping) obj;
+
+        return (other.getLabel().equals(label) && other.getType().equals(type));
     }
 }
