@@ -99,7 +99,14 @@ public class MappingCrudService {
             throw new NotFoundException(String.format("No mapping found with id %s", id));
         }
         var mapping = mappingToUpdate.get();
-        mapping.upsertClassifier(classifier);
+        var classifiers = mapping.getClassifiers();
+        for (var storedClassifier : classifiers) {
+            if (storedClassifier.getService() == classifier.getService()) {
+                classifiers.remove(storedClassifier);
+            }
+        }
+        classifiers.add(classifier);
+        mapping.setClassifiers(classifiers);
         mappingRepository.save(mapping);
     }
 

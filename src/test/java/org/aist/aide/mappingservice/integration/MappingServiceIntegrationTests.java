@@ -179,4 +179,30 @@ public class MappingServiceIntegrationTests {
         //assert
         Assert.assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND);
     }
+
+    @Test
+    public void givenItemWithNoClassifier_WhenUpdateClassifierIsCalled_ClassifierIsAdded() {
+        //arrange
+        mappingController.createMapping(mapping2);
+
+        //act
+        mappingController.updateClassifier(mapping2.getId(), classifier);
+
+        //assert
+        var response = mappingController.getMapping(mapping2.getId());
+        Assert.assertTrue(response.getBody().getClassifiers().contains(classifier));
+    }
+
+    @Test
+    public void givenItemWithClassifier_WhenUpdateClassifierIsCalled_ClassifierIsUpdated() {
+        //arrange
+        mappingController.createMapping(mapping);
+
+        //act
+        mappingController.updateClassifier(mapping.getId(), classifierHighScore);
+
+        //assert
+        var response = mappingController.getMapping(mapping.getId());
+        Assert.assertTrue(response.getBody().getClassifiers().contains(classifierHighScore));
+    }
 }

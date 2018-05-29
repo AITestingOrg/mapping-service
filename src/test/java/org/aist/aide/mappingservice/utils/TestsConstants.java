@@ -13,6 +13,7 @@ public class TestsConstants {
     public static final String type = "type";
     public static final String abstraction = "abstraction";
     public static final Classifier classifier = new Classifier(Services.APISERVICE, 0.0);
+    public static final Classifier classifierHighScore = new Classifier(Services.APISERVICE, 0.9);
     private static TreeSet<Classifier> classifiers = new TreeSet<>(Arrays.asList(classifier));
     public static final Mapping mapping = new Mapping(id, label, type, classifiers, abstraction);
 

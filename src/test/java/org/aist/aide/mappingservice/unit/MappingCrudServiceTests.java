@@ -18,10 +18,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 
-@DataJpaTest
 @RunWith(MockitoJUnitRunner.class)
 public class MappingCrudServiceTests {
     @Mock

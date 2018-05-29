@@ -3,7 +3,6 @@ package org.aist.aide.mappingservice.domain.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.Serializable;
-import java.util.Set;
 import java.util.TreeSet;
 import javax.validation.constraints.NotBlank;
 import org.springframework.data.annotation.Id;
@@ -58,7 +57,7 @@ public class Mapping implements Serializable {
         return type;
     }
 
-    public Set<Classifier> getClassifiers() {
+    public TreeSet<Classifier> getClassifiers() {
         return classifiers;
     }
 
@@ -74,15 +73,8 @@ public class Mapping implements Serializable {
         this.defaultAbstraction = defaultAbstraction;
     }
 
-    public void upsertClassifier(Classifier classifier) {
-        for (var storedClassifier : classifiers) {
-            if (storedClassifier.getService() == classifier.getService()) {
-                classifiers.remove(storedClassifier);
-                classifiers.add(classifier);
-                return;
-            }
-        }
-        classifiers.add(classifier);
+    public void setClassifiers(TreeSet<Classifier> classifiers) {
+        this.classifiers = classifiers;
     }
 
     @Override

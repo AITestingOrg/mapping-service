@@ -1,13 +1,13 @@
 buildscript {
-	ext {
-		springBootVersion = '2.0.1.RELEASE'
-	}
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-	}
+    ext {
+        springBootVersion = '2.0.1.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
 }
 
 apply plugin: 'java'
@@ -22,73 +22,69 @@ version = '0.0.1'
 sourceCompatibility = 10
 
 repositories {
-	mavenCentral()
-	maven { url "https://repo.spring.io/milestone" }
+    mavenCentral()
+    maven { url "https://repo.spring.io/milestone" }
 }
 
 
 ext {
-	springCloudVersion = 'Finchley.RC1'
+    springCloudVersion = 'Finchley.RC1'
 }
 
 dependencies {
-	compile 'javax.xml.bind:jaxb-api'
-	compile('javax.validation:validation-api')
-	compile 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-    compile "org.springframework.boot:spring-boot-starter-jdbc:${springBootVersion}"
+    compile 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     compile "org.springframework.boot:spring-boot-starter-validation:${springBootVersion}"
-	compile('org.springframework.boot:spring-boot-starter-data-mongodb')
-	compile('org.springframework.boot:spring-boot-starter-web')
-	compile('org.springframework.boot:spring-boot-starter-data-jpa')
-	compile('com.h2database:h2')
+    compile('org.springframework.boot:spring-boot-starter-data-mongodb')
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile('javax.validation:validation-api')
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
-	testCompile('org.springframework.boot:spring-boot-test')
-	testCompile('org.springframework.cloud:spring-cloud-starter-contract-verifier')
-	testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile('org.springframework.boot:spring-boot-test')
+    testCompile('org.springframework.cloud:spring-cloud-starter-contract-verifier')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
 dependencyManagement {
-	imports {
-		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-	}
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
 }
 
 checkstyle {
-	toolVersion = "8.7"
-	configFile = new File(rootDir, "checkstyle.xml")
-	maxWarnings = 0
-	maxErrors = 0
+    toolVersion = "8.7"
+    configFile = new File(rootDir, "checkstyle.xml")
+    maxWarnings = 0
+    maxErrors = 0
 }
 
 checkstyleMain {
-	source = fileTree('src/main') {
-		excludes = ['*.yml']
-	}
+    source = fileTree('src/main') {
+        excludes = ['*.yml']
+    }
 }
 checkstyleTest {
-	source = fileTree('src/test') {
-		excludes = ['*.yml']
-	}
+    source = fileTree('src/test') {
+        excludes = ['*.yml']
+    }
 }
 
 jacoco {
-	toolVersion = "0.8.1"
+    toolVersion = "0.8.1"
 }
 
 jacocoTestReport {
-	reports {
-		html.destination file("${buildDir}/jacocoHtml")
-	}
+    reports {
+        html.destination file("${buildDir}/jacocoHtml")
+    }
 }
 
 jacocoTestCoverageVerification {
-	violationRules {
-		rule {
-			limit {
-				minimum = 0.85
-			}
-		}
-	}
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.85
+            }
+        }
+    }
 }
 test.finalizedBy(jacocoTestCoverageVerification)
