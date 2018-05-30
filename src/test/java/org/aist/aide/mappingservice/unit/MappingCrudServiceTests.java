@@ -6,8 +6,9 @@ import static org.mockito.Mockito.when;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 import java.util.Optional;
-import org.aist.aide.mappingservice.domain.exceptions.NotFoundException;
-import org.aist.aide.mappingservice.domain.exceptions.ValidationFailureException;
+
+import org.aist.aide.formexpert.common.exceptions.NotFoundException;
+import org.aist.aide.formexpert.common.exceptions.ValidationFailureException;
 import org.aist.aide.mappingservice.domain.services.MappingCrudService;
 import org.aist.aide.mappingservice.service.repositories.MappingRepository;
 import org.junit.Assert;

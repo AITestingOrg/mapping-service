@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import org.aist.aide.mappingservice.domain.exceptions.NotFoundException;
-import org.aist.aide.mappingservice.domain.exceptions.ValidationFailureException;
-import org.aist.aide.mappingservice.domain.models.Classifier;
+import org.aist.aide.formexpert.common.exceptions.NotFoundException;
+import org.aist.aide.formexpert.common.exceptions.ValidationFailureException;
+import org.aist.aide.formexpert.common.models.Classifier;
 import org.aist.aide.mappingservice.domain.models.Mapping;
 import org.aist.aide.mappingservice.service.repositories.MappingRepository;
 import org.springframework.beans.factory.annotation.Autowired;

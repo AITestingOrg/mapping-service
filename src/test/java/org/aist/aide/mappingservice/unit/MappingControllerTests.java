@@ -4,8 +4,8 @@ import static org.aist.aide.mappingservice.utils.TestsConstants.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import org.aist.aide.mappingservice.domain.exceptions.NotFoundException;
-import org.aist.aide.mappingservice.domain.exceptions.ValidationFailureException;
+import org.aist.aide.formexpert.common.exceptions.NotFoundException;
+import org.aist.aide.formexpert.common.exceptions.ValidationFailureException;
 import org.aist.aide.mappingservice.domain.services.MappingCrudService;
 import org.aist.aide.mappingservice.service.controllers.MappingController;
 import org.junit.Before;
