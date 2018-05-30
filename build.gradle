@@ -32,13 +32,12 @@ ext {
 }
 
 dependencies {
+    compile files('./libs/form-expert-common-1.1.jar')
     compile 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     compile "org.springframework.boot:spring-boot-starter-validation:${springBootVersion}"
     compile('org.springframework.boot:spring-boot-starter-data-mongodb')
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('javax.validation:validation-api')
-
-    compile files('./libs/form-expert-common-1.1.jar')
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('org.springframework.boot:spring-boot-test')

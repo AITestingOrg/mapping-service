@@ -1,6 +1,6 @@
 spring:
-  application:
-    name: mappingservice
+  profiles:
+    include: default
   data:
     mongodb:
       uri: mongodb://mongo/mapping_service # Mongo database URI. When set, host and port are ignored.
@@ -13,4 +13,4 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://discoveryservice:8761/eureka/
-    fetch-registry: false
+    register-with-eureka: true
