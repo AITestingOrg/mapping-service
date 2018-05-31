@@ -5,7 +5,6 @@ spring:
     mongodb:
       uri: mongodb://localhost/mapping_service # Mongo database URI. When set, host and port are ignored.
       port: 27017 # Mongo server port.
-      enabled: true # Enable Mongo repositories.
 
 eureka:
   client:

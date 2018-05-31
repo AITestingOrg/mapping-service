@@ -5,7 +5,6 @@ spring:
     mongodb:
       uri: mongodb://mongo/mapping_service # Mongo database URI. When set, host and port are ignored.
       port: 27017 # Mongo server port.
-      enabled: true # Enable Mongo repositories.
       username: user # Login user of the mongo server.
       password: pass # Login password of the mongo server.
 
